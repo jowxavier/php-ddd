@@ -3,7 +3,7 @@
 use App\DomainDrivenDesign\Domain\Customer\Entities\Customer;
 use App\DomainDrivenDesign\Domain\Customer\ValueObjects\Address;
 
-$customer = (new Customer('Jonathan Xavier Ribeiro', 
+$customer = (new Customer(1, 'Jonathan Xavier Ribeiro', 
                 new Address('Rua 1', 10, '07110010', 'São Paulo', 'SP')
             )
         );

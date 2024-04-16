@@ -8,12 +8,23 @@ use DomainException;
 class Customer
 {
     public function __construct(
+        private string $id, 
         private string $name, 
         private Address $address, 
         private bool $active = false
     )
     {
         $this->validate();
+    }
+
+    public function getId() 
+    {
+        return $this->id;
+    }
+
+    public function getName() 
+    {
+        return $this->name;
     }
 
     private function validate() 
