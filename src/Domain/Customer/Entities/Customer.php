@@ -2,13 +2,14 @@
 
 namespace App\DomainDrivenDesign\Domain\Customer\Entities;
 
+use App\DomainDrivenDesign\Domain\Customer\ValueObjects\Address;
 use DomainException;
 
 class Customer
 {
     public function __construct(
         private string $name, 
-        private string $address, 
+        private Address $address, 
         private bool $active = false
     )
     {
