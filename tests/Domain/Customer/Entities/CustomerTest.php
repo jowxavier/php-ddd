@@ -2,9 +2,9 @@
 
 use App\DomainDrivenDesign\Domain\Customer\Entities\Customer;
 
-$customer = (new Customer())
-                ->setName('Jonathan Xavier Ribeiro')
-                ->setEmail('jonathanxribeiro@gmail.com');
+$customer = (new Customer('Jonathan Xavier Ribeiro', 'Rua 1'));
 
 it('should returns object', fn() => expect($customer)->toBeObject());
+it("shouldn't returns changeName validate message", fn() => expect($customer->changeName('Jack Sparrow'))->not->toBe('Name is not valid.'));
+it("shouldn't returns activate validate message", fn() => expect($customer->activate())->not->toBe('Address is mandatory to activate customer.'));
 

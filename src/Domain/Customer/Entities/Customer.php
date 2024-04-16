@@ -2,33 +2,43 @@
 
 namespace App\DomainDrivenDesign\Domain\Customer\Entities;
 
+use DomainException;
+
 class Customer
 {
-    private string $name;
-    private string $email; 
-
-    public function getName(): string
+    public function __construct(
+        private string $name, 
+        private string $address, 
+        private bool $active = false
+    )
     {
-        return $this->name;
+        $this->validate();
     }
 
-    public function setName($name): Customer
+    private function validate() 
+    {
+        if (empty($this->name)) {
+            throw new DomainException('Name is not valid.');
+        }
+    }
+
+    public function changeName(string $name): void
     {
         $this->name = $name;
-
-        return $this;
+        $this->validate();
     }
 
-    public function getEmail(): string
+    public function activate(): void
     {
-        return $this->email;
+        if (empty($this->address)) {
+            throw new DomainException('Address is mandatory to activate customer.');
+        }
+        $this->active = true;
     }
 
-    public function setEmail($email): Customer
+    public function desactivate(): void
     {
-        $this->email = $email;
-
-        return $this;
+        $this->active = false;
     }
 }
 
