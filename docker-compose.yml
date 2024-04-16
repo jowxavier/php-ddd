@@ -1,0 +1,33 @@
+version: '3.9'
+
+services:
+    web:
+        image: nginx:latest
+        container_name: ddd-web
+        ports:
+            - '80:80'
+        volumes:
+            - ./:/var/www/html
+            - ./config/default.conf:/etc/nginx/conf.d/default.conf
+
+    app:
+        build:
+            context: ./config
+        container_name: ddd-app
+        volumes:
+            - ./:/var/www/html
+        ports:
+            - "9000:9000"
+
+    mysql:
+        image: mysql:5.7
+        container_name: ddd-mysql
+        command: --default-authentication-plugin=mysql_native_password --explicit_defaults_for_timestamp=1
+        restart: always
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: secret
+            MYSQL_DATABASE: ddd-example
+        volumes:
+            - ./.docker/data:/var/lib/mysql
