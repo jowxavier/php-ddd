@@ -37,5 +37,13 @@ class Order
             throw new DomainException('Customer is not valid.');
         }
     }
+
+    public function total()
+    {
+        return array_reduce($this->orderItem, function($total, $item) {
+            $total += $item->total();
+            return $total;
+        }); 
+    }
 }
 

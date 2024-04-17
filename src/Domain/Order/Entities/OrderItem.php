@@ -42,5 +42,10 @@ class OrderItem
             throw new DomainException('Price is not valid.');
         }
     }
+
+    public function total()
+    {
+        return $this->price * $this->quantity; 
+    }
 }
 
