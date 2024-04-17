@@ -1,6 +1,5 @@
 <?php
 
-use DomainException;
 use App\DomainDrivenDesign\Domain\Product\Entities\Product;
 
 $product = new Product(1, 'item', 10);

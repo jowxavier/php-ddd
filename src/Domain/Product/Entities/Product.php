@@ -30,6 +30,12 @@ class Product
         return $this->price;
     }
 
+    public function changePrice(float $price): void
+    {
+        $this->price = $price;
+        $this->validate();
+    }
+
     private function validate() 
     {
         if (empty($this->name)) {
