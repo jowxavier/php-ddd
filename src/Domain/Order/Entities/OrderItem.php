@@ -7,9 +7,11 @@ use DomainException;
 class OrderItem
 {
     public function __construct(
-        private string $id, 
+        private string $id,
+        private string $productId, 
         private string $name,
-        private float $price
+        private float $price,
+        private int $quantity
     )
     {
         $this->validate();
