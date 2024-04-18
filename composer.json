@@ -19,5 +19,8 @@
         "allow-plugins": {
             "pestphp/pest-plugin": true
         }
+    },
+    "require": {
+        "robmorgan/phinx": "^0.16.0"
     }
 }
