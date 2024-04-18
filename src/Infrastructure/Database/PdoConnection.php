@@ -11,7 +11,7 @@ class PdoConnection
 
     public function __construct(
         private $host = "mysql",
-        private $dbname = "domain_driven_design",
+        private $dbname = "ddd-example",
         private $username = "root",
         private $password = "secret",
         private $charset = "utf8"
