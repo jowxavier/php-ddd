@@ -1,6 +1,6 @@
 <?php
 
-namespace App\CleanArch\Infrastructure\Adapters\Repositories;
+namespace App\DomainDrivenDesign\Infrastructure\Repositories\Pdo;
 
 use PDO;
 use App\DomainDrivenDesign\Domain\Customer\Entities\Customer;
@@ -11,7 +11,7 @@ use App\DomainDrivenDesign\Domain\Customer\Repositories\CustomerRepositoryInterf
 
 final class CustomerRepository extends PdoConnection implements CustomerRepositoryInterface
 {
-    public function create(array $data): void
+    public function create(array $data): object
     {        
         $query = $this->pdo->prepare(
             "INSERT INTO `customers` (name, address_id, active) VALUES (:name, :address_id, :active)"
@@ -21,9 +21,11 @@ final class CustomerRepository extends PdoConnection implements CustomerReposito
         $query->bindParam(':address_id', $data['address_id'], PDO::PARAM_INT); 
         $query->bindParam(':active', $data['active'], PDO::PARAM_STR);
         $query->execute();
+
+        return $this->findById($this->pdo->lastInsertId());
     }
 
-    public function update(array $data, int $id): void
+    public function update(array $data, int $id): object
     {
         $query = $this->pdo->prepare(
             "UPDATE `customers` SET name = :name, address_id = :address_id, active = :active WHERE id = :id"
@@ -33,17 +35,19 @@ final class CustomerRepository extends PdoConnection implements CustomerReposito
         $query->bindParam(':address_id', $data['address_id'], PDO::PARAM_INT); 
         $query->bindParam(':active', $data['active'], PDO::PARAM_STR);
         $query->bindParam(':id', $id, PDO::PARAM_INT);
-        $query->execute();
+        $query->execute();        
+
+        return $this->findById($id);
     }
 
-    public function delete(int $id): void
+    public function delete(int $id): bool
     {
         $query = $this->pdo->prepare(
             "DELETE FROM `customers` WHERE id = :id"
         );
 
         $query->bindParam(':id', $id, PDO::PARAM_INT);
-        $query->execute();
+        return $query->execute();
     }
 
     public function findById(int $id): object 
@@ -61,12 +65,7 @@ final class CustomerRepository extends PdoConnection implements CustomerReposito
             throw new CustomerNotFoundException($id);
         }
 
-        $customer = (new Customer($record->id, $record->name, 
-                new Address('Rua 1', 10, '07110010', 'São Paulo', 'SP')
-            )
-        );
-
-        return $customer;
+        return $record;
     }
 
     public function findAll(): object 
