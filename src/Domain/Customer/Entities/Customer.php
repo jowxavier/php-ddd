@@ -7,24 +7,21 @@ use DomainException;
 
 class Customer
 {
-    public function __construct(
-        private string $id, 
-        private string $name, 
-        private Address $address, 
-        private bool $active = false
-    )
-    {
-        $this->validate();
+    private int $id; 
+    private string $name; 
+    private Address $address; 
+    private bool $active = false;
+
+    public function __get($attribute) {
+        return $this->$attribute;
     }
 
-    public function getId() 
-    {
-        return $this->id;
-    }
+    public function __set($attribute, $value) {
+        if ($attribute === 'active') {
+            return false;
+        }
 
-    public function getName() 
-    {
-        return $this->name;
+        $this->$attribute = $value;
     }
 
     private function validate() 
