@@ -7,6 +7,7 @@ use DomainException;
 final class Address
 {
     public function __construct(
+        private int $id,
         private string $street, 
         private string $number,
         private string $zipcode,
@@ -15,6 +16,10 @@ final class Address
     )
     {
         $this->validate();
+    }
+
+    public function __get($attribute) {
+        return $this->$attribute;
     }
 
     private function validate()
