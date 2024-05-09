@@ -14,13 +14,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@master
-
-      - name: Setting up PHP
-        uses: ./.github/php
+        uses: actions/checkout@v1
 
       - name: Installing Composer
-        run: ./.github/php/scripts/run-composer.sh
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
 
       - name: Running PHPUnit
         run: ./.github/php/scripts/run-pestphp.sh
