@@ -16,21 +16,45 @@ jobs:
       mysql:
         image: mysql:5.7
         env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: yes
-          MYSQL_DATABASE: ddd-example
+          MYSQL_DATABASE: database_test
+          MYSQL_ROOT_PASSWORD: root
         ports:
-          - 3306
+          - 3306/tcp
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v4
 
-      - name: Installing Composer
-        run: composer install -q --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
+      - name: Set MySQL mode
+        run: |
+          mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports[3306] }} -uroot -proot -e "SET GLOBAL sql_mode = \"ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION\""
+          mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports[3306] }} -uroot -proot -e "SET @@GLOBAL.collation_server = 'utf8mb4_general_ci';"
+          mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports[3306] }} -uroot -proot -e "SET @@SESSION.collation_connection = 'utf8mb4_general_ci';"
+          mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports[3306] }} -uroot -proot -e "SET @@SESSION.collation_database = 'utf8mb4_general_ci';"
+          mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports[3306] }} -uroot -proot -e "CREATE DATABASE IF NOT EXISTS ddd_test;"
+ 
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2        
+        with:
+          php-version: 8.2
+          extensions: pdo_mysql
+          tools: composer:v2
+          coverage: xdebug
 
-      - name: Execute Phinx
-        run: ./vendor/bin/phinx migrate
+      - name: Installing Dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
-      - name: Running PestPHP
+      - name: Access database
+        run: mysql -h 127.0.0.1 -u root -proot -e 'SHOW DATABASES;'
+
+      - name: Execute Phinx        
         env:
           DB_PORT: ${{ job.services.mysql.ports[3306] }}
-        run: ./vendor/bin/pest
+          DB_USERNAME: root
+          DB_PASSWORD: root
+          DB_NAME: ddd_test
+          DB_CHARSET: utf8
+        run: ./vendor/bin/phinx migrate
+
+      #- name: Running PestPHP
+      #  run: ./vendor/bin/pest
