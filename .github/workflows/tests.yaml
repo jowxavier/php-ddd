@@ -20,7 +20,7 @@ jobs:
         uses: ./.github/php
 
       - name: Installing Composer
-        run: ./.github/scripts/run-composer.sh
+        run: ./.github/php/scripts/run-composer.sh
 
       - name: Running PHPUnit
-        run: ./.github/scripts/run-phpunit.sh
+        run: ./.github/php/scripts/run-pestphp.sh
