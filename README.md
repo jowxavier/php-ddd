@@ -15,6 +15,11 @@ docker compose exec app bash
 composer install
 ```
 
+### Executando Database
+```bash
+./vendor/bin/phinx migrate
+```
+
 ### Executando Testes
 ```bash
 ./vendor/bin/pest
