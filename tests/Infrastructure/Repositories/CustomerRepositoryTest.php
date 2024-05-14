@@ -1,7 +1,8 @@
 <?php
 
+uses()->group('repository');
+
 use App\DomainDrivenDesign\Infrastructure\Repositories\Pdo\CustomerRepository;
-use App\DomainDrivenDesign\Domain\Customer\Exceptions\CustomerNotFoundException;
 use App\DomainDrivenDesign\Domain\Customer\Repositories\CustomerRepositoryInterface;
 
 it('should returns if it is an instance', fn() => expect(new CustomerRepository)->toBeInstanceOf(CustomerRepositoryInterface::class));
