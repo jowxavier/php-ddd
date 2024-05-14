@@ -1,4 +1,4 @@
-name: Core API Tests
+name: DDD Tests
 
 on:
   push:
